@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite" parallel="methods" thread-count="5">
+    <listeners>
+        <listener
+                class-name="integrationPackage.utils.ITestListenerImpl" />
+    </listeners>
+    <test name="Example">
+        <classes>
+            <class name="integrationTest.ui.EmployeeTest">
+        </class>
+        </classes>
+    </test>
+</suite>

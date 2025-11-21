@@ -1,0 +1,67 @@
+package integrationPackage.utils;
+
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+
+import java.io.File;
+import java.util.HashMap;
+
+
+public class ExcelOperations {
+    String filePath;
+    Sheet sh;
+
+    public ExcelOperations(String sheetName) {
+        try {
+
+            filePath = System.getProperty("user.dir")+ReadProperties.getProperties("ExcelTestData");
+            CreateLogger.info("Read Properties Filepath for excel sheet : "+ filePath.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //open file - workbook
+        File testDataFile = new File(filePath);
+        Workbook wb = null;
+        try {
+            wb = WorkbookFactory.create(testDataFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        sh = wb.getSheet(sheetName);
+        CreateLogger.info("Read Properties SheetName : "+ sh.toString());
+    }
+    //get test data from test data sheet in hashmap based on row number
+    @SuppressWarnings("deprecation")
+    public HashMap<String, String> getTestDataInMap(int rowNum) throws Exception {
+        //read data row by row and put in map
+        HashMap<String, String> hm = new HashMap<String, String>();
+
+        for (int i = 0; i < sh.getRow(0).getLastCellNum(); i++) {
+            String value;
+            if(sh.getRow(rowNum).getCell(i) != null) {
+                sh.getRow(rowNum).getCell(i).setCellType(CellType.STRING);
+                value = sh.getRow(rowNum).getCell(i).toString();
+                CreateLogger.info("Read value of Row Value : "+value);
+            }
+            else {
+                value = "";
+            }
+            hm.put(sh.getRow(0).getCell(i).toString(), value);
+        }
+        return hm;
+    }
+
+    //get row count
+    public int getRowCount() {
+        return sh.getLastRowNum();
+    }
+
+    //ger column count
+    public int getColCount() {
+        return sh.getRow(0).getLastCellNum();
+
+    }
+}
